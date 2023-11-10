@@ -10,7 +10,11 @@ For the most part, you should only use `Representatives`. The `RepresentativeSet
 
 ## How to use it
 
-First, create an instance of the `Representatives` class:
+This package depends on `BeautifulSoup`. Installation instructions can be found here: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup
+
+I usually install it the easy way: `pip install beautifulsoup4`
+
+Once you have the BeautifulSoup package installed, yo ucan use this package. First, create an instance of the `Representatives` class:
 ```python
 reps = Representatives()
 ```
