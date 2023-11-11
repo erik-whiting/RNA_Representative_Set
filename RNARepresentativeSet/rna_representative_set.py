@@ -130,36 +130,3 @@ class WebsiteParser:
                 rep_set[c] = rep_id
 
         return rep_set, chain_dict
-
-
-# Testing
-reps = RNARepresentativeSet()
-constituent = "7P8Q|1|B"
-expected = "6E0O"
-print(f"Get unique representative for {constituent}. It should be {expected}")
-rep = reps.get_rep_for(constituent)
-print(f"Representative is {rep}")
-
-
-list_of_constituents = [
-    "1VQ6|1|4", # Repped by 1VQ6
-    "6OY5|1|I", # Repped by 6N61
-    "7MQC|1|B", # Repped by 6N61
-    "1PVO|1|L", # Repped by 1PV0
-    "4NIA|1|7"  # Repped by 6D30
-]
-print("Get a set of unique representatives given a list of constituents")
-print(f"List: {list_of_constituents}")
-rep_set = reps.get_unique_reps_from_list(list_of_constituents)
-print(f"Unique list: {rep_set}")
-print(f"We expect 1VQ6, 6N61, 1PV0, 6D30 (in any order)")
-
-print()
-print("Testing chain info")
-key = "6XU8|1|A5+6XU8|1|A8"
-print(f"For key {key}")
-info = reps[key]
-print(f"We get {info}")
-print("So we can get this:")
-print(f"reps['{key}']['pdb_id'] --> {reps[key]['pdb_id']}")
-print(f"reps['{key}']['info'] --> {reps[key]['info']}")

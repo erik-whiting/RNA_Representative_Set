@@ -16,7 +16,9 @@ I usually install it the easy way: `pip install beautifulsoup4`
 
 Once you have the BeautifulSoup package installed, yo ucan use this package. First, create an instance of the `RNARepresentativeSet` class:
 ```python
-reps = RNARepresentativeSet()
+from RNA_Representative_Set import RNARepresentativeSet
+
+reps = RNARepresentativeSet.RNARepresentativeSet()
 ```
 
 The default instantation (i.e., creating an instance with no input parameters to the constructor) will parse the webpage's latest release and the 4.0A resolution cutoff. You can get whatever release and cutoff you want though. Here are some examples:
