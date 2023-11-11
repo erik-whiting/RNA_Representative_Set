@@ -35,7 +35,36 @@ reps = Representatives(relase_id="3.292")
 reps = Representatives(relase_id="3.292", resolution_cutoff="20.0A")
 ```
 
-After creating a `Representatives` object, you now have access to two methods:
+You can get representative info for a chain by accessing the object the same way you'd access a dictionary object:
+
+```python
+data = reps["6XU8|1|A5+6XU8|1|A8"]
+print(data)
+""" Output of printing `data`:
+{'pdb_id': '6XU8', 'info': ['28S ribosomal RNA, 5.8S ribosomal RNA, 2[...]', 'Electron microscopy', 'Release Date: 2021-07-28', 'Standardized name:  LSU rRNA +  5.8S rRNA', 'Source: Eukarya', 'Rfam: RF02543 + RF00002']}
+"""
+```
+
+Notice there are also two keys in the object returned, `pdb_id` and `info`:
+
+```python
+key = "6XU8|1|A5+6XU8|1|A8"
+
+print(reps[key]["pdb_id"])
+# Output: 6XU8
+
+print(reps[key]["info"])
+# Output: ['28S ribosomal RNA, 5.8S ribosomal RNA, 2[...]', 'Electron microscopy', 'Release Date: 2021-07-28', 'Standardized name:  LSU rRNA +  5.8S rRNA', 'Source: Eukarya', 'Rfam: RF02543 + RF00002']
+```
+
+Note: When you try to access a chain that doesn't exist in the representative set, the value returned will be false. Example:
+
+```python
+print(reps["SomeNonexistentChain"])
+# Ouputs: False
+```
+
+There are also two possibly helpful methods on the `Representatives` object:
 * `get_rep_for`
 * `get_unique_reps_from_list`
 
