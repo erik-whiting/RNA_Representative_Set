@@ -13,7 +13,7 @@ except ImportError:
 class Representatives:
     def __init__(self, release_id=None, resolution_cutoff="4.0A"):
         self.rs = RepresentativeSet
-        self.rep_set = RepresentativeSet.get_by_release(release_id=release_id, resolution_cutoff=resolution_cutoff)
+        self.rep_set, self.chain_info = RepresentativeSet.get_by_release(release_id=release_id, resolution_cutoff=resolution_cutoff)
 
     def get_unique_reps_from_list(self, list_of_etnries):
         unique_reps = set()
@@ -32,6 +32,12 @@ class Representatives:
             # No representative, return false
             rep = False
         return rep
+
+    def __getitem__(self, key):
+        try:
+            return self.chain_info[key]
+        except KeyError:
+            return False
 
 
 # Utility Class, use `Representatives` if you're going to parse the release data many times
@@ -91,6 +97,8 @@ class RepresentativeSet:
         data_size = len(data)
         print(f"Building representative set from {data_size} represntatives")
         rep_set = {}
+        chain_dict = {}
+        row_counter = 1
         for d in data:
             rep_id = d[1].split("(")[1].split(")")[0]
             spl = d[4].split(",")
@@ -106,10 +114,26 @@ class RepresentativeSet:
                 message += f"{constituents}\n"
                 raise Exception(f"Bad split, the developer did something wrong.\n{message}")
 
+            info_box = d[1]
+            k = info_box.split()[0]
+            info = info_box.split(k)[1].strip()
+            pdb_id = info[0:6]
+            info = info.split(pdb_id)[1].strip()
+            pdb_id = pdb_id[1:5]
+            row = str(rows[row_counter])
+            info_box = row.split("<td>")[3]
+            line_items = info_box.split("<ul>")[1]
+            line_items = line_items.split("<li>")
+            line_items.remove("")
+            chain_info = []
+            for li in line_items:
+                chain_info.append(li.replace("</li>", "").replace("</ul></td>", ""))
+            chain_dict[k] = {"pdb_id": pdb_id, "info": chain_info}
+            row_counter += 1
             for c in constituents:
                 rep_set[c] = rep_id
 
-        return rep_set
+        return rep_set, chain_dict
 
 
 # Testing
@@ -133,3 +157,13 @@ print(f"List: {list_of_constituents}")
 rep_set = reps.get_unique_reps_from_list(list_of_constituents)
 print(f"Unique list: {rep_set}")
 print(f"We expect 1VQ6, 6N61, 1PV0, 6D30 (in any order)")
+
+print()
+print("Testing chain info")
+key = "6XU8|1|A5+6XU8|1|A8"
+print(f"For key {key}")
+info = reps[key]
+print(f"We get {info}")
+print("So we can get this:")
+print(f"reps['{key}']['pdb_id'] --> {reps[key]['pdb_id']}")
+print(f"reps['{key}']['info'] --> {reps[key]['info']}")
