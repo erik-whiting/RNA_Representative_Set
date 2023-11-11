@@ -6,14 +6,10 @@ except ImportError:
     from bs4 import BeautifulSoup
 
 
-# Make an instance of this class if you're going to do many operations. The
-# static class in this file will query and parse the BGSU page for pretty much
-# every operation. Parsing takes ~30 seconds, so this class persists the data
-# from the first call to make subsequent calls faster.
-class Representatives:
+class RNARepresentativeSet:
     def __init__(self, release_id=None, resolution_cutoff="4.0A"):
-        self.rs = RepresentativeSet
-        self.rep_set, self.chain_info = RepresentativeSet.get_by_release(release_id=release_id, resolution_cutoff=resolution_cutoff)
+        self.parser = WebsiteParser
+        self.rep_set, self.chain_info = WebsiteParser.get_by_release(release_id=release_id, resolution_cutoff=resolution_cutoff)
 
     def get_unique_reps_from_list(self, list_of_etnries):
         unique_reps = set()
@@ -40,15 +36,15 @@ class Representatives:
             return False
 
 
-# Utility Class, use `Representatives` if you're going to parse the release data many times
-class RepresentativeSet:
+# Utility class, use `RNARepresentativeSet` if you only need to parse the webpage once
+class WebsiteParser:
     base_url = "http://rna.bgsu.edu/rna3dhub/nrlist"
     resolution_cutoffs = ["1.5A", "2.0A", "2.5A", "3.0A", "3.5A", "4.0A", "20.0A", "all"]
 
     @staticmethod
     def get_latest_release():
         print("Getting latest relase number")
-        url = RepresentativeSet.base_url
+        url = WebsiteParser.base_url
         html = requests.get(url).content
         soup = BeautifulSoup(html, "html.parser")
         table = soup.table
@@ -70,13 +66,13 @@ class RepresentativeSet:
             resolution_cutoff = resolution_cutoff.lower() # The URL ends with "/all"
         else:
             resolution_cutoff = resolution_cutoff.upper()
-        if resolution_cutoff not in RepresentativeSet.resolution_cutoffs:
-            raise Exception(f"Resolution cutoff {resolution_cutoff} must be in {RepresentativeSet.resolution_cutoffs}")
+        if resolution_cutoff not in WebsiteParser.resolution_cutoffs:
+            raise Exception(f"Resolution cutoff {resolution_cutoff} must be in {WebsiteParser.resolution_cutoffs}")
 
         if not release_id:
-            release_id = RepresentativeSet.get_latest_release()
+            release_id = WebsiteParser.get_latest_release()
 
-        release_url = f"{RepresentativeSet.base_url}/release/{release_id}/{resolution_cutoff}"
+        release_url = f"{WebsiteParser.base_url}/release/{release_id}/{resolution_cutoff}"
         print(f"Getting data from URL: {release_url}, this will take a minute or so ...")
         html = requests.get(release_url).content
         soup = BeautifulSoup(html, "html.parser")
@@ -134,36 +130,3 @@ class RepresentativeSet:
                 rep_set[c] = rep_id
 
         return rep_set, chain_dict
-
-
-# Testing
-reps = Representatives()
-constituent = "7P8Q|1|B"
-expected = "6E0O"
-print(f"Get unique representative for {constituent}. It should be {expected}")
-rep = reps.get_rep_for(constituent)
-print(f"Representative is {rep}")
-
-
-list_of_constituents = [
-    "1VQ6|1|4", # Repped by 1VQ6
-    "6OY5|1|I", # Repped by 6N61
-    "7MQC|1|B", # Repped by 6N61
-    "1PVO|1|L", # Repped by 1PV0
-    "4NIA|1|7"  # Repped by 6D30
-]
-print("Get a set of unique representatives given a list of constituents")
-print(f"List: {list_of_constituents}")
-rep_set = reps.get_unique_reps_from_list(list_of_constituents)
-print(f"Unique list: {rep_set}")
-print(f"We expect 1VQ6, 6N61, 1PV0, 6D30 (in any order)")
-
-print()
-print("Testing chain info")
-key = "6XU8|1|A5+6XU8|1|A8"
-print(f"For key {key}")
-info = reps[key]
-print(f"We get {info}")
-print("So we can get this:")
-print(f"reps['{key}']['pdb_id'] --> {reps[key]['pdb_id']}")
-print(f"reps['{key}']['info'] --> {reps[key]['info']}")

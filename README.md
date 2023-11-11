@@ -3,10 +3,10 @@
 This package is a utility tool for the releases found in the [Representative Sets of RNA 3D Structures](http://rna.bgsu.edu/rna3dhub/nrlist).
 
 There is one file, `representative_set.py`, with two classes:
-* `Representatives`
-* `RepresentativeSet`
+* `RNARepresentativeSet`
+* `WebsiteParser`
 
-For the most part, you should only use `Representatives`. The `RepresentativeSet` methods parse the live web page, which isn't very fast. The `Representatives` class persists the data parsed from the webpage so the website doesn't have to be scraped more than once.
+For the most part, you should only use `RNARepresentativeSet`. The `WebsiteParser` methods parse the live web page, which isn't very fast. The `RNARepresentativeSet` class persists the data parsed from the webpage so the website doesn't have to be scraped more than once. If you *do* happen to need to parse the web page though, the `RNARepresentativeSet` object has an attribute called `parser` that is the `WebsiteParser` class.
 
 ## How to use it
 
@@ -14,25 +14,27 @@ This package depends on `BeautifulSoup`. Installation instructions can be found 
 
 I usually install it the easy way: `pip install beautifulsoup4`
 
-Once you have the BeautifulSoup package installed, yo ucan use this package. First, create an instance of the `Representatives` class:
+Once you have the BeautifulSoup package installed, yo ucan use this package. First, create an instance of the `RNARepresentativeSet` class:
 ```python
-reps = Representatives()
+from RNA_Representative_Set import RNARepresentativeSet
+
+reps = RNARepresentativeSet.RNARepresentativeSet()
 ```
 
 The default instantation (i.e., creating an instance with no input parameters to the constructor) will parse the webpage's latest release and the 4.0A resolution cutoff. You can get whatever release and cutoff you want though. Here are some examples:
 
 ```python
 # Get latest data
-reps = Representatives()
+reps = RNARepresentativeSet()
 
 # Get latest data at 20.0A resolution cutoff
-reps = Representatives(resolution_cutoff="20.0A")
+reps = RNARepresentativeSet(resolution_cutoff="20.0A")
 
 # Get release 3.292 with default 4.0A resolution cutoff
-reps = Representatives(relase_id="3.292")
+reps = RNARepresentativeSet(relase_id="3.292")
 
 # Get release 3.292 with 20.0A resolution cutoff
-reps = Representatives(relase_id="3.292", resolution_cutoff="20.0A")
+reps = RNARepresentativeSet(relase_id="3.292", resolution_cutoff="20.0A")
 ```
 
 You can get representative info for a chain by accessing the object the same way you'd access a dictionary object:
@@ -64,14 +66,14 @@ print(reps["SomeNonexistentChain"])
 # Ouputs: False
 ```
 
-There are also two possibly helpful methods on the `Representatives` object:
+There are also two possibly helpful methods on the `RNARepresentativeSet` object:
 * `get_rep_for`
 * `get_unique_reps_from_list`
 
 The `get_rep_for` method takes an entry and returns the representative PDB ID for it. For example:
 
 ```python
-reps = Representatives()
+reps = RNARepresentativeSet()
 constituent = "7P8Q|1|B"
 rep = reps.get_rep_for(constituent)
 print(rep) # Outputs "6E0O"
@@ -80,7 +82,7 @@ print(rep) # Outputs "6E0O"
 The method `get_unique_reps_from_list` takes in a list of entries and returns a unique set of PDB IDs. For example:
 
 ```python
-reps = Representatives()
+reps = RNARepresentativeSet()
 
 list_of_constituents = [
     "1VQ6|1|4", # Repped by 1VQ6
