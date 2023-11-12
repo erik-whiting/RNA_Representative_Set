@@ -1,0 +1,10 @@
+LICENSE
+README.md
+setup.py
+RNARepresentativeSet/__init__.py
+RNARepresentativeSet/rna_representative_set.py
+RNARepresentativeSet.egg-info/PKG-INFO
+RNARepresentativeSet.egg-info/SOURCES.txt
+RNARepresentativeSet.egg-info/dependency_links.txt
+RNARepresentativeSet.egg-info/requires.txt
+RNARepresentativeSet.egg-info/top_level.txt

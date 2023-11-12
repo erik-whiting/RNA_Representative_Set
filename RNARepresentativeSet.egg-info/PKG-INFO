@@ -1,3 +1,17 @@
+Metadata-Version: 2.1
+Name: RNARepresentativeSet
+Version: 1.0
+Summary: Tool for working with representative RNAs
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Intended Audience :: Science/Research
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # RNA Representative Set
 
 This package is a utility tool for the releases found in the [Representative Sets of RNA 3D Structures](http://rna.bgsu.edu/rna3dhub/nrlist).
@@ -16,9 +30,9 @@ I usually install it the easy way: `pip install beautifulsoup4`
 
 Once you have the BeautifulSoup package installed, yo ucan use this package. First, create an instance of the `RNARepresentativeSet` class:
 ```python
-from RNARepresentativeSet import RNARepresentativeSet
+from RNA_Representative_Set import RNARepresentativeSet
 
-reps = RNARepresentativeSet()
+reps = RNARepresentativeSet.RNARepresentativeSet()
 ```
 
 The default instantation (i.e., creating an instance with no input parameters to the constructor) will parse the webpage's latest release and the 4.0A resolution cutoff. You can get whatever release and cutoff you want though. Here are some examples:
