@@ -10,6 +10,10 @@ class RNARepresentativeSet:
     def __init__(self, release_id=None, resolution_cutoff="4.0A"):
         self.parser = WebsiteParser
         self.rep_set, self.chain_info = WebsiteParser.get_by_release(release_id=release_id, resolution_cutoff=resolution_cutoff)
+        pdb_ids = set()
+        for rs in list(self.chain_info.keys()):
+            pdb_ids.add(rs[:4])
+        self.pdb_ids = list(pdb_ids)
 
     def get_unique_reps_from_list(self, list_of_etnries):
         unique_reps = set()
@@ -43,7 +47,7 @@ class WebsiteParser:
 
     @staticmethod
     def get_latest_release():
-        print("Getting latest relase number")
+        print("Getting latest release number")
         url = WebsiteParser.base_url
         html = requests.get(url).content
         soup = BeautifulSoup(html, "html.parser")
