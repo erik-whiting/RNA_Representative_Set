@@ -8,3 +8,4 @@ RNARepresentativeSet.egg-info/SOURCES.txt
 RNARepresentativeSet.egg-info/dependency_links.txt
 RNARepresentativeSet.egg-info/requires.txt
 RNARepresentativeSet.egg-info/top_level.txt
+tests/test_rna_representative_set.py
